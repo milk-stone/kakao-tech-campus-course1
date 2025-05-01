@@ -31,14 +31,14 @@ public class ArithmeticCalculator {
             case DIVIDE:
                 if (right == 0.0) {
                     System.out.println("0으로 나눌 수 없습니다. (Error : Division by zero)");
-                    break;
+                    return null;
                 }
                 result = left / right;
                 store(result);
                 break;
             default:
                 System.out.println("잘못된 사칙연산 기호입니다.");
-                break;
+                return null;
         }
         return result;
     }

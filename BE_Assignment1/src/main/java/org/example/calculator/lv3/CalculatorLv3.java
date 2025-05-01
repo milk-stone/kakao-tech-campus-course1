@@ -12,9 +12,15 @@ public class CalculatorLv3 {
         while (true) {
             System.out.println("---------------------------------------------");
             System.out.print("첫 번째 숫자를 입력하세요: ");
-            int a = sc.nextInt();
+            Number a = readNumber(sc);
             System.out.print("두 번째 숫자를 입력하세요: ");
-            int b = sc.nextInt();
+            Number b = readNumber(sc);
+
+            if (a == null || b == null) {
+                System.out.println("숫자가 입력되지 않았습니다. 다시 시도해주세요.");
+                continue;
+            }
+
             System.out.print("사칙연산 기호를 입력하세요 (+, -, *, /): ");
             char operator = sc.next().charAt(0);
 
@@ -26,9 +32,10 @@ public class CalculatorLv3 {
             OperationType opType = op.get();
 
             Double result = calc.calculate(a, b, opType);
+            if (result != null) System.out.println("연산 결과 : " + a + " " + operator + " " + b + " = " + result);
 
             System.out.print("저장 기록 중 N 보다 큰 수를 불러옵니다. N을 입력해주세요: ");
-            int n = sc.nextInt();
+            Number n = readNumber(sc);
             List<Double> greaterList = calc.findHistoryGreaterThan(n);
             System.out.println("저장 기록 중 N 보다 큰 수: " + greaterList);
 
@@ -50,5 +57,12 @@ public class CalculatorLv3 {
             }
         }
         sc.close();
+    }
+
+    private static Number readNumber(Scanner sc) {
+        if (sc.hasNextInt())      return sc.nextInt();
+        if (sc.hasNextDouble())   return sc.nextDouble();
+        String trash = sc.next();
+        return null;
     }
 }
