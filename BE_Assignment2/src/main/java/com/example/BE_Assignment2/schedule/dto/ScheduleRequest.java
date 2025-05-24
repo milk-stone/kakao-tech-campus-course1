@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 public class ScheduleRequest {
     private String email;
+    private String name;
     private String task;
     private String password;
 }
