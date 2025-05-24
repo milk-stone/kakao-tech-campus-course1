@@ -1,0 +1,28 @@
+# ──────────────────────────────
+# 공통 설정
+# ──────────────────────────────
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  profiles:
+    active: dev
+  datasource:
+    driver-class-name: ${DRIVER_CLASS_NAME}
+    url: jdbc:mysql://${RDS_HOST}:${RDS_PORT}/${RDS_DB_NAME}
+    username: ${RDS_USERNAME}
+    password: ${RDS_PASSWORD}
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+  data:
+    jdbc:
+      repositories:
+        enabled: true
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+    org.springframework.jdbc.core: DEBUG
