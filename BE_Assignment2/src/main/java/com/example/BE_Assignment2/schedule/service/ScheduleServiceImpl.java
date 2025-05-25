@@ -66,8 +66,15 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public ResponseEntity<Void> updateSchedule(Long id, ScheduleUpdateRequest request){
-        Optional<Long> updated = scheduleRepository.updateById(id, request);
+    public ResponseEntity<Void> updateSchedule(Long schedule_id, ScheduleUpdateRequest request){
+        // 사용자 정보 불러오기
+        Optional<User> userOpt = userService.findUserByEmail(request.getEmail());
+        if (userOpt.isEmpty()) {
+            throw new IllegalArgumentException("해당 이메일에 해당하는 사용자가 존재하지 않습니다: " + request.getEmail());
+        }
+        Long user_id = userOpt.get().getUser_id();
+
+        Optional<Long> updated = scheduleRepository.updateById(schedule_id, user_id, request);
         if (updated.isPresent()){
             return ResponseEntity.ok().build();
         }

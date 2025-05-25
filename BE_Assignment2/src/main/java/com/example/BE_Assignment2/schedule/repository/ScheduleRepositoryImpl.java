@@ -1,5 +1,7 @@
 package com.example.BE_Assignment2.schedule.repository;
 
+import com.example.BE_Assignment2.exception.EntityNotFoundException;
+import com.example.BE_Assignment2.exception.PasswordMismatchException;
 import com.example.BE_Assignment2.schedule.dto.ScheduleRequest;
 import com.example.BE_Assignment2.schedule.dto.ScheduleResponse;
 import com.example.BE_Assignment2.schedule.dto.ScheduleUpdateRequest;
@@ -76,7 +78,6 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         int total = jdbcTemplate.queryForObject(countSql, params.toArray(), Integer.class);
 
         // 2. 데이터 쿼리 (페이징 + 정렬)
-        // 2. 데이터 쿼리
         String dataSql = "SELECT s.*, u.user_name " + baseSql + " ORDER BY s.updated_at DESC LIMIT ? OFFSET ?";
         params.add(pageable.getPageSize());
         params.add(pageable.getOffset());
@@ -106,29 +107,65 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     @Override
-    public Optional<Long> updateById(Long id, ScheduleUpdateRequest request){
-        String sql = "UPDATE schedule SET task = ?, user_name = ?, updated_at = NOW() WHERE id = ? AND password = ?";
+    public Optional<Long> updateById(Long schedule_id, Long user_id, ScheduleUpdateRequest request){
+        String checkSql = "SELECT password FROM schedule WHERE schedule_id = ?";
 
-        int updated = jdbcTemplate.update(
-                sql,
+        String savedPassword;
+        try {
+            savedPassword = jdbcTemplate.queryForObject(
+                    checkSql,
+                    new Object[]{schedule_id},
+                    String.class
+            );
+        } catch (EmptyResultDataAccessException e) {
+            throw new EntityNotFoundException("해당 스케줄이 존재하지 않습니다.");
+        }
+
+        if (!savedPassword.equals(savedPassword)) {
+            throw new PasswordMismatchException();
+        }
+
+        String schedule_sql = "UPDATE schedule SET task = ?, updated_at = NOW() WHERE schedule_id = ? AND password = ?";
+
+        int updated_schedule = jdbcTemplate.update(
+                schedule_sql,
                 request.getTask(),
-                request.getUser_name(),
-                id,
+                schedule_id,
                 request.getPassword()
         );
-        System.out.println(updated);
 
-        if (updated > 0) {
-            return Optional.of(id);
+        String user_sql = "UPDATE user SET user_name = ? WHERE user_id = ?";
+        int update_user_name = jdbcTemplate.update(user_sql, request.getUser_name(), user_id);
+
+        if (updated_schedule > 0 || update_user_name > 0) {
+            return Optional.of(schedule_id);
         } else {
             return Optional.empty();
         }
     }
 
     @Override
-    public boolean deleteById(Long id, String password){
-        String sql = "DELETE FROM schedule WHERE id = ? AND password = ?";
-        int afftedRows = jdbcTemplate.update(sql, id, password);
+    public boolean deleteById(Long schedule_id, String password){ // id : schedule_id
+        String checkSql = "SELECT password FROM schedule WHERE schedule_id = ?";
+
+        String savedPassword;
+        try {
+            savedPassword = jdbcTemplate.queryForObject(
+                    checkSql,
+                    new Object[]{schedule_id},
+                    String.class
+            );
+        } catch (EmptyResultDataAccessException e) {
+            throw new EntityNotFoundException("해당 스케줄이 존재하지 않습니다. ID = " + schedule_id);
+        }
+
+        // 비밀번호 검증
+        if (!savedPassword.equals(password)) {
+            throw new PasswordMismatchException();
+        }
+
+        String sql = "DELETE FROM schedule WHERE schedule_id = ? AND password = ?";
+        int afftedRows = jdbcTemplate.update(sql, schedule_id, password);
         return afftedRows > 0;
     }
 }

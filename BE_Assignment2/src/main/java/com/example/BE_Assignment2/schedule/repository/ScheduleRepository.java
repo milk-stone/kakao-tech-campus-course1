@@ -12,6 +12,6 @@ public interface ScheduleRepository {
     Long save(ScheduleRequest request, Long user_id, String user_name);
     Page<ScheduleResponse> findAllByConditions(String updatedAt, Long user_id, Pageable pageable);
     Optional<ScheduleResponse> findById(Long id);
-    Optional<Long> updateById(Long id, ScheduleUpdateRequest request);
+    Optional<Long> updateById(Long schedule_id, Long user_id, ScheduleUpdateRequest request);
     boolean deleteById(Long id, String password);
 }

@@ -7,4 +7,5 @@ public class ScheduleUpdateRequest {
     private String task;
     private String password;
     private String user_name;
+    private String email;
 }
