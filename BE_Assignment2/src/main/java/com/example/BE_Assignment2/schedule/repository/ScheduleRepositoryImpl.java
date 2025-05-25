@@ -2,6 +2,7 @@ package com.example.BE_Assignment2.schedule.repository;
 
 import com.example.BE_Assignment2.schedule.dto.ScheduleRequest;
 import com.example.BE_Assignment2.schedule.dto.ScheduleResponse;
+import com.example.BE_Assignment2.schedule.dto.ScheduleUpdateRequest;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -98,6 +99,26 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
             return Optional.ofNullable(jdbcTemplate.queryForObject(sql, new Object[]{id}, scheduleResponseMapper()));
         }
         catch (EmptyResultDataAccessException e){
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public Optional<Long> updateById(Long id, ScheduleUpdateRequest request){
+        String sql = "UPDATE schedule SET task = ?, user_name = ?, updated_at = NOW() WHERE id = ? AND password = ?";
+
+        int updated = jdbcTemplate.update(
+                sql,
+                request.getTask(),
+                request.getUser_name(),
+                id,
+                request.getPassword()
+        );
+        System.out.println(updated);
+
+        if (updated > 0) {
+            return Optional.of(id);
+        } else {
             return Optional.empty();
         }
     }

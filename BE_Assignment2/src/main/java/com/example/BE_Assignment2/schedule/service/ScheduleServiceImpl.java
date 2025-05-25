@@ -2,6 +2,7 @@ package com.example.BE_Assignment2.schedule.service;
 
 import com.example.BE_Assignment2.schedule.dto.ScheduleRequest;
 import com.example.BE_Assignment2.schedule.dto.ScheduleResponse;
+import com.example.BE_Assignment2.schedule.dto.ScheduleUpdateRequest;
 import com.example.BE_Assignment2.schedule.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -36,6 +37,15 @@ public class ScheduleServiceImpl implements ScheduleService {
         Optional<ScheduleResponse> res = scheduleRepository.findById(id);
         if (res.isPresent()){
             return ResponseEntity.ok(res.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @Override
+    public ResponseEntity<Void> updateSchedule(Long id, ScheduleUpdateRequest request){
+        Optional<Long> updated = scheduleRepository.updateById(id, request);
+        if (updated.isPresent()){
+            return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
     }

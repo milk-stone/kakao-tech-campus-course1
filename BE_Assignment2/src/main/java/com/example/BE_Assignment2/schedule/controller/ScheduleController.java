@@ -3,6 +3,7 @@ package com.example.BE_Assignment2.schedule.controller;
 import com.example.BE_Assignment2.schedule.dto.ScheduleDeleteRequest;
 import com.example.BE_Assignment2.schedule.dto.ScheduleRequest;
 import com.example.BE_Assignment2.schedule.dto.ScheduleResponse;
+import com.example.BE_Assignment2.schedule.dto.ScheduleUpdateRequest;
 import com.example.BE_Assignment2.schedule.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,7 @@ public class ScheduleController {
     // 1. 일정 생성
     @PostMapping("/create")
     public ResponseEntity<Void> createSchedule(@RequestBody ScheduleRequest scheduleRequest) {
+        System.out.println(scheduleRequest.getEmail() + scheduleRequest.getName() + scheduleRequest.getTask() + scheduleRequest.getPassword());
         return scheduleService.createSchedule(scheduleRequest);
     }
 
@@ -40,12 +42,12 @@ public class ScheduleController {
         return scheduleService.getSchedule(schedule_id);
     }
 
-//    // 4. 특정 일정 수정
-//    @PutMapping("/{schedule_id}")
-//    public ResponseEntity<Void> updateSchedule(@PathVariable("schedule_id") Long schedule_id, ScheduleRequest scheduleRequest) {
-//
-//        return ResponseEntity.ok().build();
-//    }
+    // 4. 특정 일정 수정
+    @PutMapping("/{schedule_id}")
+    public ResponseEntity<Void> updateSchedule(@PathVariable("schedule_id") Long schedule_id, @RequestBody ScheduleUpdateRequest request) {
+        System.out.println(request.getTask() + request.getPassword() + request.getUser_name());
+        return scheduleService.updateSchedule(schedule_id, request);
+    }
 //
 //    // 5. 선택한 일정 삭제
 //    // DELETE /schedules/5 + Json body
