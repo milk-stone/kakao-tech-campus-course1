@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +59,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
 
         if (updatedAt != null && !updatedAt.isBlank()) {
             baseSql.append(" AND DATE(updated_at) = ?");
-            params.add(LocalDateTime.parse(updatedAt));
+            params.add(LocalDate.parse(updatedAt));
         }
 
         if (name != null && !name.isBlank()) {
