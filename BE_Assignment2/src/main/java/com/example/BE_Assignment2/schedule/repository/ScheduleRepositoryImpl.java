@@ -122,4 +122,11 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
             return Optional.empty();
         }
     }
+
+    @Override
+    public boolean deleteById(Long id, String password){
+        String sql = "DELETE FROM schedule WHERE id = ? AND password = ?";
+        int afftedRows = jdbcTemplate.update(sql, id, password);
+        return afftedRows > 0;
+    }
 }

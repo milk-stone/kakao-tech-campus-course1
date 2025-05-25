@@ -1,5 +1,6 @@
 package com.example.BE_Assignment2.schedule.service;
 
+import com.example.BE_Assignment2.schedule.dto.ScheduleDeleteRequest;
 import com.example.BE_Assignment2.schedule.dto.ScheduleRequest;
 import com.example.BE_Assignment2.schedule.dto.ScheduleResponse;
 import com.example.BE_Assignment2.schedule.dto.ScheduleUpdateRequest;
@@ -45,6 +46,14 @@ public class ScheduleServiceImpl implements ScheduleService {
     public ResponseEntity<Void> updateSchedule(Long id, ScheduleUpdateRequest request){
         Optional<Long> updated = scheduleRepository.updateById(id, request);
         if (updated.isPresent()){
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteSchedule(Long id, ScheduleDeleteRequest request){
+        if (scheduleRepository.deleteById(id, request.getPassword())){
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();

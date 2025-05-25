@@ -13,4 +13,5 @@ public interface ScheduleRepository {
     public Page<ScheduleResponse> findAllByConditions(String updatedAt, String name, Pageable pageable);
     public Optional<ScheduleResponse> findById(Long id);
     public Optional<Long> updateById(Long id, ScheduleUpdateRequest request);
+    public boolean deleteById(Long id, String password);
 }

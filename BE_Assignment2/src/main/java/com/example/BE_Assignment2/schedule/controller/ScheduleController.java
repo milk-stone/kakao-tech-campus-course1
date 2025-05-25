@@ -48,12 +48,11 @@ public class ScheduleController {
         System.out.println(request.getTask() + request.getPassword() + request.getUser_name());
         return scheduleService.updateSchedule(schedule_id, request);
     }
-//
-//    // 5. 선택한 일정 삭제
-//    // DELETE /schedules/5 + Json body
-//    @DeleteMapping("/{schedule_id}")
-//    public ResponseEntity<Void> deleteSchedule(@PathVariable("schedule_id") Long schedule_id, @RequestBody ScheduleDeleteRequest req) {
-//
-//        return ResponseEntity.ok().build();
-//    }
+
+    // 5. 선택한 일정 삭제
+    // DELETE /schedules/5 + Json body
+    @DeleteMapping("/{schedule_id}")
+    public ResponseEntity<Void> deleteSchedule(@PathVariable("schedule_id") Long schedule_id, @RequestBody ScheduleDeleteRequest req) {
+        return scheduleService.deleteSchedule(schedule_id, req);
+    }
 }
