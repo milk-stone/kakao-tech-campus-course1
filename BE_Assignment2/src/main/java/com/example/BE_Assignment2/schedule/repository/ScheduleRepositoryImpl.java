@@ -96,7 +96,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
 
     @Override
     public Optional<ScheduleResponse> findById(Long id){
-        String sql = "SELECT user_name, task, created_at, updated_at FROM schedule WHERE id = ?";
+        String sql = "SELECT u.user_name, s.task, s.created_at, s.updated_at FROM schedule s JOIN user u ON s.user_id = u.user_id WHERE s.user_id = ?";
         try {
             return Optional.ofNullable(jdbcTemplate.queryForObject(sql, new Object[]{id}, scheduleResponseMapper()));
         }
