@@ -9,9 +9,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 public interface ScheduleService {
-    public ResponseEntity<Void> createSchedule(ScheduleRequest scheduleRequest);
-    public ResponseEntity<Page<ScheduleResponse>> getSchedules(String updatedAt, String name, Pageable pageable);
-    public ResponseEntity<ScheduleResponse> getSchedule(Long id);
-    public ResponseEntity<Void> updateSchedule(Long id, ScheduleUpdateRequest scheduleUpdateRequest);
-    public ResponseEntity<Void> deleteSchedule(Long id, ScheduleDeleteRequest request);
+    ResponseEntity<Void> createSchedule(ScheduleRequest scheduleRequest);
+    ResponseEntity<Page<ScheduleResponse>> getSchedules(String updatedAt, String name, Pageable pageable);
+    ResponseEntity<ScheduleResponse> getSchedule(Long id);
+    ResponseEntity<Void> updateSchedule(Long id, ScheduleUpdateRequest scheduleUpdateRequest);
+    ResponseEntity<Void> deleteSchedule(Long id, ScheduleDeleteRequest request);
 }
