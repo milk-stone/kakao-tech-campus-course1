@@ -17,4 +17,16 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleRuntimeException(RuntimeException e){
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
+
+    @ExceptionHandler(PasswordMismatchException.class)
+    public ResponseEntity<String> handlePasswordMismatch(PasswordMismatchException e) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED) // 401 Unauthorized
+                .body(e.getMessage());
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<String> handleEntityNotFoundException(EntityNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
 }
