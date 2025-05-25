@@ -2,6 +2,7 @@ package com.example.BE_Assignment2.user.controller;
 
 import com.example.BE_Assignment2.user.dto.UserRequest;
 import com.example.BE_Assignment2.user.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +18,7 @@ public class UserController {
 
     // 1. 유저 등록
     @PostMapping
-    public ResponseEntity<Void> createUser(@RequestBody UserRequest userRequest) {
+    public ResponseEntity<Void> createUser(@RequestBody @Valid UserRequest userRequest) {
         return userService.createUser(userRequest);
     }
 

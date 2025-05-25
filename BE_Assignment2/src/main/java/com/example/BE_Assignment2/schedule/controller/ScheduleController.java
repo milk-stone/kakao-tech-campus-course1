@@ -5,6 +5,7 @@ import com.example.BE_Assignment2.schedule.dto.ScheduleRequest;
 import com.example.BE_Assignment2.schedule.dto.ScheduleResponse;
 import com.example.BE_Assignment2.schedule.dto.ScheduleUpdateRequest;
 import com.example.BE_Assignment2.schedule.service.ScheduleService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,8 +22,7 @@ public class ScheduleController {
 
     // 1. 일정 생성
     @PostMapping("/create")
-    public ResponseEntity<Void> createSchedule(@RequestBody ScheduleRequest scheduleRequest) {
-        System.out.println(scheduleRequest.getEmail() + scheduleRequest.getName() + scheduleRequest.getTask() + scheduleRequest.getPassword());
+    public ResponseEntity<Void> createSchedule(@RequestBody @Valid ScheduleRequest scheduleRequest) {
         return scheduleService.createSchedule(scheduleRequest);
     }
 
@@ -44,7 +44,7 @@ public class ScheduleController {
 
     // 4. 특정 일정 수정
     @PutMapping("/{schedule_id}")
-    public ResponseEntity<Void> updateSchedule(@PathVariable("schedule_id") Long schedule_id, @RequestBody ScheduleUpdateRequest request) {
+    public ResponseEntity<Void> updateSchedule(@PathVariable("schedule_id") Long schedule_id, @RequestBody @Valid ScheduleUpdateRequest request) {
         System.out.println(request.getTask() + request.getPassword() + request.getUser_name());
         return scheduleService.updateSchedule(schedule_id, request);
     }
@@ -52,7 +52,7 @@ public class ScheduleController {
     // 5. 선택한 일정 삭제
     // DELETE /schedules/5 + Json body
     @DeleteMapping("/{schedule_id}")
-    public ResponseEntity<Void> deleteSchedule(@PathVariable("schedule_id") Long schedule_id, @RequestBody ScheduleDeleteRequest req) {
+    public ResponseEntity<Void> deleteSchedule(@PathVariable("schedule_id") Long schedule_id, @RequestBody @Valid ScheduleDeleteRequest req) {
         return scheduleService.deleteSchedule(schedule_id, req);
     }
 }
