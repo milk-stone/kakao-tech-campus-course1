@@ -9,4 +9,5 @@ import org.springframework.http.ResponseEntity;
 public interface ScheduleService {
     public ResponseEntity<Void> createSchedule(ScheduleRequest scheduleRequest);
     public ResponseEntity<Page<ScheduleResponse>> getSchedules(String updatedAt, String name, Pageable pageable);
+    public ResponseEntity<ScheduleResponse> getSchedule(Long id);
 }

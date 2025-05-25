@@ -2,6 +2,7 @@ package com.example.BE_Assignment2.schedule.repository;
 
 import com.example.BE_Assignment2.schedule.dto.ScheduleRequest;
 import com.example.BE_Assignment2.schedule.dto.ScheduleResponse;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ScheduleRepositoryImpl implements ScheduleRepository {
@@ -89,4 +91,14 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         );
     }
 
+    @Override
+    public Optional<ScheduleResponse> findById(Long id){
+        String sql = "SELECT user_name, task, created_at, updated_at FROM schedule WHERE id = ?";
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject(sql, new Object[]{id}, scheduleResponseMapper()));
+        }
+        catch (EmptyResultDataAccessException e){
+            return Optional.empty();
+        }
+    }
 }

@@ -34,17 +34,15 @@ public class ScheduleController {
     }
 
 
-//    // 3. 특정 일정 조회
-//    @GetMapping("/{schedule_id}")
-//    public ResponseEntity<ScheduleResponse> getSchedule(@PathVariable("schedule_id") Long schedule_id) {
-//
-//        return ResponseEntity.ok(new ScheduleResponse());
-//    }
-//
+    // 3. 특정 일정 조회
+    @GetMapping("/{schedule_id}")
+    public ResponseEntity<ScheduleResponse> getSchedule(@PathVariable("schedule_id") Long schedule_id) {
+        return scheduleService.getSchedule(schedule_id);
+    }
+
 //    // 4. 특정 일정 수정
 //    @PutMapping("/{schedule_id}")
 //    public ResponseEntity<Void> updateSchedule(@PathVariable("schedule_id") Long schedule_id, ScheduleRequest scheduleRequest) {
-//
 //
 //        return ResponseEntity.ok().build();
 //    }

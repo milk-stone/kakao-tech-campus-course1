@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
@@ -27,5 +29,14 @@ public class ScheduleServiceImpl implements ScheduleService {
     public ResponseEntity<Page<ScheduleResponse>> getSchedules(String updatedAt, String name, Pageable pageable){
         Page<ScheduleResponse> result = scheduleRepository.findAllByConditions(updatedAt, name, pageable);
         return ResponseEntity.ok(result);
+    }
+
+    @Override
+    public ResponseEntity<ScheduleResponse> getSchedule(Long id){
+        Optional<ScheduleResponse> res = scheduleRepository.findById(id);
+        if (res.isPresent()){
+            return ResponseEntity.ok(res.get());
+        }
+        return ResponseEntity.notFound().build();
     }
 }
