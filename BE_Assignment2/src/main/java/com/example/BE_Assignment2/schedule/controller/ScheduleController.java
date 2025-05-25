@@ -30,9 +30,9 @@ public class ScheduleController {
     // GET /schedules?updatedAt=2025-05-25&author=홍길동&page=0&size=5
     @GetMapping
     public ResponseEntity<Page<ScheduleResponse>> getSchedules(@RequestParam(required = false) String updatedAt,
-                                                               @RequestParam(required = false) String name,
+                                                               @RequestParam(required = false) String email,
                                                                Pageable pageable) {
-        return scheduleService.getSchedules(updatedAt, name, pageable);
+        return scheduleService.getSchedules(updatedAt, email, pageable);
     }
 
 

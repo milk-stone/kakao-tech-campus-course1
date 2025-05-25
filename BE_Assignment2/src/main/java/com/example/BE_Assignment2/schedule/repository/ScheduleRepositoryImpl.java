@@ -55,18 +55,20 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     @Override
-    public Page<ScheduleResponse> findAllByConditions(String updatedAt, String name, Pageable pageable) {
-        StringBuilder baseSql = new StringBuilder("FROM schedule WHERE 1=1");
+    public Page<ScheduleResponse> findAllByConditions(String updatedAt, Long user_id, Pageable pageable) {
+        StringBuilder baseSql = new StringBuilder(
+                "FROM schedule s JOIN user u ON s.user_id = u.user_id WHERE 1=1"
+        );
         List<Object> params = new ArrayList<>();
 
         if (updatedAt != null && !updatedAt.isBlank()) {
-            baseSql.append(" AND DATE(updated_at) = ?");
+            baseSql.append(" AND DATE(s.updated_at) = ?");
             params.add(LocalDate.parse(updatedAt));
         }
 
-        if (name != null && !name.isBlank()) {
-            baseSql.append(" AND user_name = ?");
-            params.add(name);
+        if (user_id != null && !user_id.toString().isBlank()) {
+            baseSql.append(" AND s.user_id = ?");
+            params.add(user_id);
         }
 
         // 1. total count 쿼리
@@ -74,7 +76,8 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         int total = jdbcTemplate.queryForObject(countSql, params.toArray(), Integer.class);
 
         // 2. 데이터 쿼리 (페이징 + 정렬)
-        String dataSql = "SELECT * " + baseSql + " ORDER BY updated_at DESC LIMIT ? OFFSET ?";
+        // 2. 데이터 쿼리
+        String dataSql = "SELECT s.*, u.user_name " + baseSql + " ORDER BY s.updated_at DESC LIMIT ? OFFSET ?";
         params.add(pageable.getPageSize());
         params.add(pageable.getOffset());
 

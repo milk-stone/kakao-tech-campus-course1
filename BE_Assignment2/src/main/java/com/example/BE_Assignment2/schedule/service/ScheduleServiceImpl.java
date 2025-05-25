@@ -39,8 +39,20 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public ResponseEntity<Page<ScheduleResponse>> getSchedules(String updatedAt, String name, Pageable pageable){
-        Page<ScheduleResponse> result = scheduleRepository.findAllByConditions(updatedAt, name, pageable);
+    public ResponseEntity<Page<ScheduleResponse>> getSchedules(String updatedAt, String email, Pageable pageable){
+        Long userId = null;
+        String userName = null;
+
+        if (email != null && !email.isBlank()){
+            // 사용자 정보 불러오기
+            Optional<User> userOpt = userService.findUserByEmail(email);
+            if (userOpt.isEmpty()) {
+                throw new IllegalArgumentException("해당 이메일에 해당하는 사용자가 존재하지 않습니다: " + email);
+            }
+            userId = userOpt.get().getUser_id();
+        }
+
+        Page<ScheduleResponse> result = scheduleRepository.findAllByConditions(updatedAt, userId, pageable);
         return ResponseEntity.ok(result);
     }
 

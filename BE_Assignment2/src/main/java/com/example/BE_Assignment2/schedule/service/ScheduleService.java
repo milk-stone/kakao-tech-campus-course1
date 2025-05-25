@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 
 public interface ScheduleService {
     ResponseEntity<Void> createSchedule(ScheduleRequest scheduleRequest);
-    ResponseEntity<Page<ScheduleResponse>> getSchedules(String updatedAt, String name, Pageable pageable);
+    ResponseEntity<Page<ScheduleResponse>> getSchedules(String updatedAt, String email, Pageable pageable);
     ResponseEntity<ScheduleResponse> getSchedule(Long id);
     ResponseEntity<Void> updateSchedule(Long id, ScheduleUpdateRequest scheduleUpdateRequest);
     ResponseEntity<Void> deleteSchedule(Long id, ScheduleDeleteRequest request);
