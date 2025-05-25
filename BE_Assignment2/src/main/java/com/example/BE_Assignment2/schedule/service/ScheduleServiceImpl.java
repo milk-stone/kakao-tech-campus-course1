@@ -5,6 +5,8 @@ import com.example.BE_Assignment2.schedule.dto.ScheduleRequest;
 import com.example.BE_Assignment2.schedule.dto.ScheduleResponse;
 import com.example.BE_Assignment2.schedule.dto.ScheduleUpdateRequest;
 import com.example.BE_Assignment2.schedule.repository.ScheduleRepository;
+import com.example.BE_Assignment2.user.User;
+import com.example.BE_Assignment2.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,10 +19,19 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
+    private final UserService userService;
 
     @Override
     public ResponseEntity<Void> createSchedule(ScheduleRequest scheduleRequest){
-        Long result = scheduleRepository.save(scheduleRequest);
+        // 사용자 정보 불러오기
+        Optional<User> userOpt = userService.findUserByEmail(scheduleRequest.getEmail());
+        if (userOpt.isEmpty()) {
+            throw new IllegalArgumentException("해당 이메일에 해당하는 사용자가 존재하지 않습니다: " + scheduleRequest.getEmail());
+        }
+        Long userId = userOpt.get().getUser_id();
+        String userName = userOpt.get().getUser_name();
+
+        Long result = scheduleRepository.save(scheduleRequest, userId, userName);
         if (result == null){
             return ResponseEntity.badRequest().build();
         }

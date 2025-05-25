@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
 public interface ScheduleRepository {
-    Long save(ScheduleRequest request);
+    Long save(ScheduleRequest request, Long user_id, String user_name);
     Page<ScheduleResponse> findAllByConditions(String updatedAt, String name, Pageable pageable);
     Optional<ScheduleResponse> findById(Long id);
     Optional<Long> updateById(Long id, ScheduleUpdateRequest request);

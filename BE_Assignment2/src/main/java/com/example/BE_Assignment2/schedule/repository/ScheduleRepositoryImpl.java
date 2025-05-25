@@ -31,20 +31,19 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     @Override
-    public Long save(ScheduleRequest request) {
-        String sql = "INSERT INTO schedule (email, user_name, task, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)";
+    public Long save(ScheduleRequest request, Long user_id, String user_name) {
+        String sql = "INSERT INTO schedule (user_id, task, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         LocalDateTime now = LocalDateTime.now();
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, request.getEmail());
-            ps.setString(2, request.getName());
-            ps.setString(3, request.getTask());
-            ps.setString(4, request.getPassword()); // 평문 저장. 실제 사용 시 암호화 권장
+            ps.setString(1, user_id.toString());
+            ps.setString(2, request.getTask());
+            ps.setString(3, request.getPassword()); // 평문 저장. 실제 사용 시 암호화 권장
+            ps.setObject(4, now);
             ps.setObject(5, now);
-            ps.setObject(6, now);
             return ps;
         }, keyHolder);
 
